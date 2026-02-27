@@ -1,0 +1,24 @@
+{
+  "name": "devsider",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "worker": "node src/worker.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.19.2",
+    "csv-parser": "^3.2.0",
+    "express": "^5.2.1",
+    "multer": "^2.0.2",
+    "prisma": "^6.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

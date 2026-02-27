@@ -1,0 +1,74 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Contato {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  telefone  String
+  createdAt DateTime @default(now())
+
+  filaEnvios FilaEnvio[]
+  execucoes  ExecucaoFluxo[]
+}
+
+model Campanha {
+  id        Int      @id @default(autoincrement())
+  mensagem  String
+  delayMin  Int
+  delayMax  Int
+  status    String   @default("ativa")
+  createdAt DateTime @default(now())
+}
+
+model FilaEnvio {
+  id           Int      @id @default(autoincrement())
+  contatoId    Int
+  mensagem     String
+  agendadoPara DateTime
+  status       String   @default("pendente")
+  tentativa    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  contato Contato @relation(fields: [contatoId], references: [id])
+
+  @@index([status, agendadoPara])
+}
+
+model Fluxo {
+  id     Int     @id @default(autoincrement())
+  nome   String
+  ativo  Boolean @default(true)
+
+  etapas     FluxoEtapa[]
+  execucoes  ExecucaoFluxo[]
+}
+
+model FluxoEtapa {
+  id        Int    @id @default(autoincrement())
+  fluxoId   Int
+  ordem     Int
+  mensagem  String
+  delaySeg  Int
+
+  fluxo Fluxo @relation(fields: [fluxoId], references: [id])
+}
+
+model ExecucaoFluxo {
+  id              Int      @id @default(autoincrement())
+  contatoId       Int
+  fluxoId         Int
+  etapaAtual      Int
+  proximaExecucao DateTime
+  status          String   @default("ativo")
+
+  contato Contato @relation(fields: [contatoId], references: [id])
+  fluxo   Fluxo   @relation(fields: [fluxoId], references: [id])
+
+  @@unique([contatoId, fluxoId])
+}
