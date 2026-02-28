@@ -6,7 +6,7 @@ const MAX_TENTATIVAS = 3;
 exports.processarFila = async () => {
   const agora = new Date();
 
-  // Pega envios pendentes e já "trava" como processando (para evitar duplicidade)
+  // (para evitar duplicidade)
   const pendentes = await prisma.filaEnvio.findMany({
     where: {
       status: "pendente",
@@ -28,8 +28,8 @@ exports.processarFila = async () => {
     if (locked.count === 0) continue;
 
     try {
-      // ✅ aqui entraria WPPConnect no futuro
-      console.log("📤 Enviando para:", envio.contato.telefone);
+      
+      console.log("Enviando para:", envio.contato.telefone);
       console.log("Mensagem:", envio.mensagem);
 
       await prisma.filaEnvio.update({
