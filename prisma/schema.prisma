@@ -10,7 +10,7 @@ datasource db {
 model Contato {
   id        Int      @id @default(autoincrement())
   nome      String
-  telefone  String
+  telefone  String   @unique
   createdAt DateTime @default(now())
 
   filaEnvios FilaEnvio[]
@@ -57,6 +57,7 @@ model FluxoEtapa {
   delaySeg  Int
 
   fluxo Fluxo @relation(fields: [fluxoId], references: [id])
+   @@unique([fluxoId, ordem])
 }
 
 model ExecucaoFluxo {

@@ -14,6 +14,10 @@ exports.listarFluxos = async () => {
 };
 
 exports.criarEtapa = async (fluxoId, { ordem, mensagem, delaySeg }) => {
+  //  valida fluxo existe
+  const fluxo = await prisma.fluxo.findUnique({ where: { id: fluxoId } });
+  if (!fluxo) throw new Error("Fluxo não encontrado");
+
   return await prisma.fluxoEtapa.create({
     data: {
       fluxoId,
@@ -32,6 +36,10 @@ exports.listarEtapas = async (fluxoId) => {
 };
 
 exports.adicionarTodosContatosAoFluxo = async (fluxoId) => {
+  //  valida fluxo existe
+  const fluxo = await prisma.fluxo.findUnique({ where: { id: fluxoId } });
+  if (!fluxo) throw new Error("Fluxo não encontrado");
+
   const contatos = await prisma.contato.findMany();
 
   for (const contato of contatos) {
@@ -42,7 +50,12 @@ exports.adicionarTodosContatosAoFluxo = async (fluxoId) => {
           fluxoId,
         },
       },
-      update: {}, 
+      // se já existir, reinicia o fluxo
+      update: {
+        etapaAtual: 1,
+        proximaExecucao: new Date(),
+        status: "ativo",
+      },
       create: {
         contatoId: contato.id,
         fluxoId,
