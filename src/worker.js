@@ -25,12 +25,12 @@ async function processarFluxos() {
         where: { id: exec.id },
         data: { status: "finalizado" },
       });
-      console.log(`✅ Fluxo finalizado para contato ${exec.contatoId}`);
+      console.log(`Fluxo finalizado para contato ${exec.contatoId}`);
       continue;
     }
 
     console.log(
-      `📌 Executando etapa ${exec.etapaAtual} (fluxo ${exec.fluxoId}) para contato ${exec.contatoId}`
+      ` Executando etapa ${exec.etapaAtual} (fluxo ${exec.fluxoId}) para contato ${exec.contatoId}`
     );
 
     // Cria envio imediato na fila
@@ -61,3 +61,4 @@ setInterval(async () => {
     console.error("Erro no worker:", err?.message || err);
   }
 }, 3000);
+
